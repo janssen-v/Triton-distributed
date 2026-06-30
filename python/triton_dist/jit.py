@@ -53,14 +53,14 @@ def _is_power_of_two(n: int) -> bool:
 def _parse_cga_cluster_size() -> Optional[tuple]:
     """
     Parse TRITON_DIST_CGA_CLUSTER_SIZE environment variable.
-    
+
     Returns:
         tuple: (cluster_x, cluster_y, cluster_z) if set and valid, None otherwise.
-        
+
     Constraints:
         - Each dimension must be a power of 2 (1, 2, 4, 8, ...)
         - Total product (x * y * z) must not exceed 16
-        
+
     Examples:
         "2" -> (2, 1, 1)
         "2,1,1" -> (2, 1, 1)
@@ -208,6 +208,9 @@ def get_shmem_extern_lib() -> Dict[str, str]:
         mxshmem_lib = _get_mxshmem_libdevice()
         extern_libs = {"libshmem": str(mxshmem_lib)}
         return extern_libs
+
+    elif is_ascend():
+        return {}
 
     else:
         raise NotImplementedError("Unsupported device type to get shmem bitcode lib path.")
